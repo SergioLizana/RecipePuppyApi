@@ -15,7 +15,7 @@ class RecipePuppyListViewModel(application: Application) : AndroidViewModel(appl
 
 
     fun getRecipeList(query: String) {
-        projectListObservable = repository.getRecipeList(query)
+         repository.getRecipeList(projectListObservable,query)
     }
 
     fun getRecipeListObservable(): LiveData<Response>? {

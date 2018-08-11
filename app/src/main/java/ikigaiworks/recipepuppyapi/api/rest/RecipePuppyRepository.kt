@@ -12,18 +12,18 @@ import retrofit2.Call
 
 class RecipePuppyRepository {
 
-    fun getRecipeList(query: String): MutableLiveData<Response>{
-        var livedata : MutableLiveData<Response> = MutableLiveData()
+
+    fun getRecipeList(observableLiveData: MutableLiveData<Response>,query: String): MutableLiveData<Response>{
         RecipePuppyService.getClient().getRecipeList(query).enqueue(object : Callback<Response> {
             override fun onFailure(call: Call<Response>?, t: Throwable?) {
                 Log.d("error","on failure");
             }
 
             override fun onResponse(call: Call<Response>?, response: retrofit2.Response<Response>?) {
-                livedata.value = response?.body()
+                observableLiveData.value = response?.body()
             }
         })
-        return livedata
+        return observableLiveData
     }
 
     companion object {

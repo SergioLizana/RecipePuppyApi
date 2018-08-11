@@ -15,9 +15,14 @@ import ikigaiworks.recipepuppyapi.viewmodel.RecipePuppyListViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.widget.Toast
 import ikigaiworks.recipepuppyapi.api.model.Response
+import kotlinx.android.synthetic.main.fragment_list.*
 
 
-class ListFragment : Fragment(), LifecycleOwner {
+class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener {
+
+    override fun onClick(p0: View?) {
+        viewModel?.getRecipeList("q")
+    }
 
 
     var viewModel : RecipePuppyListViewModel? = null
@@ -25,7 +30,6 @@ class ListFragment : Fragment(), LifecycleOwner {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RecipePuppyListViewModel::class.java)
-
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -33,8 +37,9 @@ class ListFragment : Fragment(), LifecycleOwner {
         observeViewModel(viewModel)
     }
     override fun onResume() {
+        button.setOnClickListener(this)
         super.onResume()
-        viewModel?.getRecipeList("q")
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -49,8 +54,6 @@ class ListFragment : Fragment(), LifecycleOwner {
                 if(activity!=null) {
                     Toast.makeText(activity, "Ha llegado el observador", Toast.LENGTH_LONG).show()
                 }
-                //Para probar llamar varias veces a ver si observa.
-                viewModel?.getRecipeList("q")
             }
 
         })
