@@ -12,7 +12,7 @@ import retrofit2.Call
 
 class RecipePuppyRepository {
 
-    fun getRecipeList(query: String): LiveData<Response>{
+    fun getRecipeList(query: String): MutableLiveData<Response>{
         val data = MutableLiveData<Response>()
         RecipePuppyService.getClient().getRecipeList(query).enqueue(object : Callback<Response> {
             override fun onFailure(call: Call<Response>?, t: Throwable?) {
