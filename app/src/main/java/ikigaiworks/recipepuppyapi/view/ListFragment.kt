@@ -46,7 +46,11 @@ class ListFragment : Fragment(), LifecycleOwner {
     private fun observeViewModel(viewModel: RecipePuppyListViewModel?){
         viewModel?.getRecipeListObservable()?.observe(this,object : Observer<Response>{
             override fun onChanged(t: Response?) {
-                    Toast.makeText(activity,"Ha llegado el observador",Toast.LENGTH_LONG).show()
+                if(activity!=null) {
+                    Toast.makeText(activity, "Ha llegado el observador", Toast.LENGTH_LONG).show()
+                }
+                //Para probar llamar varias veces a ver si observa.
+                viewModel?.getRecipeList("q")
             }
 
         })

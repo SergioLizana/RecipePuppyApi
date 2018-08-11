@@ -10,10 +10,12 @@ import ikigaiworks.recipepuppyapi.api.rest.RecipePuppyRepository
 
 class RecipePuppyListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private var projectListObservable = MutableLiveData<Response>()
+    private var projectListObservable: MutableLiveData<Response> = MutableLiveData()
+    private var repository : RecipePuppyRepository = RecipePuppyRepository.newInstance()
+
 
     fun getRecipeList(query: String) {
-        projectListObservable = RecipePuppyRepository.newInstance().getRecipeList(query)
+        projectListObservable = repository.getRecipeList(query)
     }
 
     fun getRecipeListObservable(): LiveData<Response>? {
