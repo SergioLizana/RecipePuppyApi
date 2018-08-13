@@ -16,6 +16,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.widget.Toast
 import ikigaiworks.recipepuppyapi.api.model.Response
 import ikigaiworks.recipepuppyapi.api.model.ResultsItem
+import ikigaiworks.recipepuppyapi.utils.constants.Constants.Companion.ARG_RECIPE
 import ikigaiworks.recipepuppyapi.utils.onQueryTextChangeListener
 import ikigaiworks.recipepuppyapi.view.adapter.RecipePuppyAdapter
 import kotlinx.android.synthetic.main.fragment_list.*
@@ -38,7 +39,7 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener,onQueryText
         val item = itemPosition?.let { recipes?.get(it) }
 
         val intent = Intent(context, DetailActivity::class.java)
-        intent.putExtra("recipe", item)
+        intent.putExtra(ARG_RECIPE, item)
         startActivity(intent)
 
     }
@@ -85,7 +86,13 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener,onQueryText
         viewModel?.getRecipeListObservable()?.observe(this,object : Observer<Response>{
             override fun onChanged(t: Response?) {
                 if(activity!=null) {
-                    updateData(t)
+                    if(t == null) {
+                        (activity as MainActivity).hideLoader()
+                        Toast.makeText(context,getString(R.string.general_error),Toast.LENGTH_LONG).show()
+                        isEmptyList(true)
+                    }else{
+                        updateData(t)
+                    }
                 }
             }
 

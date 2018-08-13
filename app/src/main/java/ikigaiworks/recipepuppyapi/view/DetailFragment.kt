@@ -10,13 +10,12 @@ import android.view.ViewGroup
 
 import ikigaiworks.recipepuppyapi.R
 import ikigaiworks.recipepuppyapi.api.model.ResultsItem
+import ikigaiworks.recipepuppyapi.utils.constants.Constants.Companion.ARG_RECIPE
 import kotlinx.android.synthetic.main.fragment_detail.*
 
-private const val ARG_RECIPE = "recipe"
 
 
 class DetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
     private var recipe: ResultsItem? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

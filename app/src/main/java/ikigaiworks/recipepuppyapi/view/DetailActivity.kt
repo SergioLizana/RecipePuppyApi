@@ -21,7 +21,7 @@ class DetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
-        getSupportActionBar()?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         recipe =  intent.getParcelableExtra<ResultsItem>("recipe")
         Glide.with(this).load(recipe?.thumbnail).into(image_crop)

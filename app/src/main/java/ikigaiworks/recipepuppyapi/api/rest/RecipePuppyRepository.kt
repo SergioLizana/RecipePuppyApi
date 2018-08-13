@@ -16,7 +16,7 @@ class RecipePuppyRepository {
     fun getRecipeList(observableLiveData: MutableLiveData<Response>,query: String): MutableLiveData<Response>{
         RecipePuppyService.getClient().getRecipeList(query).enqueue(object : Callback<Response> {
             override fun onFailure(call: Call<Response>?, t: Throwable?) {
-                Log.d("error","on failure");
+                observableLiveData.value = null
             }
 
             override fun onResponse(call: Call<Response>?, response: retrofit2.Response<Response>?) {

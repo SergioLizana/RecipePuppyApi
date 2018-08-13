@@ -1,6 +1,7 @@
 package ikigaiworks.recipepuppyapi.api.rest
 
 import ikigaiworks.recipepuppyapi.api.client.RecipePuppyClient
+import ikigaiworks.recipepuppyapi.utils.constants.Constants.Companion.URL_PUPPYAPI
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.Retrofit
 
@@ -11,7 +12,7 @@ class RecipePuppyService {
     companion object {
         fun getClient(): RecipePuppyClient{
             val retrofit = Retrofit.Builder()
-                    .baseUrl("http://www.recipepuppy.com/")
+                    .baseUrl(URL_PUPPYAPI)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 

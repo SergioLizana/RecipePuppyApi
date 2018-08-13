@@ -42,24 +42,17 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         getMenuInflater().inflate(R.menu.toolbarmenu, menu)
         val mSearch = menu?.findItem(R.id.action_search)
         val mSearchView = mSearch?.getActionView() as SearchView
-        mSearchView.setQueryHint("Search")
+        mSearchView.queryHint = getString(R.string.search_hint)
         mSearchView.setOnQueryTextListener(this)
         return super.onCreateOptionsMenu(menu)
     }
 
     private fun transactionSubModule(fragment: Fragment, backStack: Boolean) {
         val transaction = supportFragmentManager.beginTransaction()
-
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and DO NOT add the transaction to the back stack since we don't want the user to
-        // be able to navigate back
         transaction.add(R.id.fragment_container, fragment, fragment.tag)
-
         if (backStack) {
             transaction.addToBackStack(fragment.tag)
         }
-
-        // Commit the transaction
         transaction.commit()
     }
 

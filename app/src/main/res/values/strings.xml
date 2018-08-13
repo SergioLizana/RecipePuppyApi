@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">RecipePuppyApi</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_hint">SEARCH</string>
+    <string name="general_error">Ha habido un error de conexión, intentelo de nuevo</string>
+    <string name="ingredients_label">Ingredients</string>
+    <string name="web_reference_label">Web Reference</string>
 </resources>
