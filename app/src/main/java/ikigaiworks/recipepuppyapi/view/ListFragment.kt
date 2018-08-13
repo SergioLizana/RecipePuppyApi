@@ -11,9 +11,8 @@ import android.view.ViewGroup
 import ikigaiworks.recipepuppyapi.R
 import ikigaiworks.recipepuppyapi.viewmodel.RecipePuppyListViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.support.v7.widget.GridLayoutManager
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.widget.Toast
 import ikigaiworks.recipepuppyapi.api.model.Response
 import ikigaiworks.recipepuppyapi.api.model.ResultsItem
@@ -23,6 +22,8 @@ import kotlinx.android.synthetic.main.fragment_list.*
 
 
 class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener,onQueryTextChangeListener {
+
+
 
     override fun onSearchQuery(text: String?) {
         text?.let { viewModel?.getRecipeList(it) }
@@ -35,7 +36,11 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener,onQueryText
     override fun onClick(view: View?) {
         val itemPosition = recipe_list?.getChildLayoutPosition(view)
         val item = itemPosition?.let { recipes?.get(it) }
-        Toast.makeText(context, item?.title, Toast.LENGTH_LONG).show()
+
+        val intent = Intent(context, DetailActivity::class.java)
+        intent.putExtra("recipe", item)
+        startActivity(intent)
+
     }
 
 
