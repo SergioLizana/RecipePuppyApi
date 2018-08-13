@@ -4,10 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Response(
-	val href: String? = null,
-	val title: String? = null,
-	val version: Double? = null,
-	val results: List<ResultsItem?>? = null
+		var href: String? = null,
+		var title: String? = null,
+		var version: Double? = null,
+		var results: List<ResultsItem?>? = null
 ) : Parcelable {
 
 	constructor(parcel: Parcel) : this(

@@ -2,8 +2,6 @@ package ikigaiworks.recipepuppyapi.view
 
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.Observer
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -13,15 +11,31 @@ import android.view.ViewGroup
 import ikigaiworks.recipepuppyapi.R
 import ikigaiworks.recipepuppyapi.viewmodel.RecipePuppyListViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.support.v7.widget.GridLayoutManager
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import ikigaiworks.recipepuppyapi.api.model.Response
+import ikigaiworks.recipepuppyapi.api.model.ResultsItem
+import ikigaiworks.recipepuppyapi.utils.onQueryTextChangeListener
+import ikigaiworks.recipepuppyapi.view.adapter.RecipePuppyAdapter
 import kotlinx.android.synthetic.main.fragment_list.*
 
 
-class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener {
+class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener,onQueryTextChangeListener {
 
-    override fun onClick(p0: View?) {
-        viewModel?.getRecipeList("q")
+    override fun onSearchQuery(text: String?) {
+        text?.let { viewModel?.getRecipeList(it) }
+        (activity as MainActivity).showLoader()
+    }
+
+
+    var recipes: List<ResultsItem?> = ArrayList<ResultsItem>()
+
+    override fun onClick(view: View?) {
+        val itemPosition = recipe_list?.getChildLayoutPosition(view)
+        val item = itemPosition?.let { recipes?.get(it) }
+        Toast.makeText(context, item?.title, Toast.LENGTH_LONG).show()
     }
 
 
@@ -30,6 +44,8 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(RecipePuppyListViewModel::class.java)
+        (activity as MainActivity).onQueryTextChangeListener = this
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -37,9 +53,21 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener {
         observeViewModel(viewModel)
     }
     override fun onResume() {
-        button.setOnClickListener(this)
         super.onResume()
+        val condition = recipes?.size==0
+        isEmptyList(condition)
+        recipe_list?.layoutManager=GridLayoutManager(activity,1)
+        recipe_list?.adapter = RecipePuppyAdapter(recipes, context,this)
+    }
 
+    private fun isEmptyList(condition: Boolean){
+        if(condition){
+            recipe_list.visibility = View.GONE
+            empty_text.visibility = View.VISIBLE
+        }else{
+            recipe_list.visibility = View.VISIBLE
+            empty_text.visibility = View.GONE
+        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -52,11 +80,21 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener {
         viewModel?.getRecipeListObservable()?.observe(this,object : Observer<Response>{
             override fun onChanged(t: Response?) {
                 if(activity!=null) {
-                    Toast.makeText(activity, "Ha llegado el observador", Toast.LENGTH_LONG).show()
+                    updateData(t)
                 }
             }
 
         })
+    }
+
+    private fun updateData(response: Response?){
+        if(response?.results!=null) {
+            recipes = response?.results!!
+        }
+        (recipe_list?.adapter as RecipePuppyAdapter).items = response?.results
+        (recipe_list?.adapter as RecipePuppyAdapter).notifyDataSetChanged()
+        isEmptyList(response?.results?.size!! == 0)
+        (activity as MainActivity).hideLoader()
     }
 
 

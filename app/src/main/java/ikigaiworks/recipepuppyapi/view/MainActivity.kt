@@ -12,24 +12,30 @@ import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v4.view.MenuItemCompat.getActionView
 import android.support.v7.widget.SearchView
 import android.widget.Toast
+import ikigaiworks.recipepuppyapi.utils.onQueryTextChangeListener
+import kotlinx.android.synthetic.main.loader.*
 
 
-class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener{
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+
+    var onQueryTextChangeListener: onQueryTextChangeListener? = null
+
+
     override fun onQueryTextSubmit(query: String?): Boolean {
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        Toast.makeText(this,newText,Toast.LENGTH_LONG).show()
+        onQueryTextChangeListener?.onSearchQuery(newText)
         return true
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
+        setSupportActionBar(search_toolbar)
         launchList()
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -41,7 +47,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener{
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun transactionSubModule(fragment: Fragment,backStack: Boolean){
+    private fun transactionSubModule(fragment: Fragment, backStack: Boolean) {
         val transaction = supportFragmentManager.beginTransaction()
 
         // Replace whatever is in the fragment_container view with this fragment,
@@ -49,7 +55,7 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener{
         // be able to navigate back
         transaction.add(R.id.fragment_container, fragment, fragment.tag)
 
-        if(backStack) {
+        if (backStack) {
             transaction.addToBackStack(fragment.tag)
         }
 
@@ -57,12 +63,17 @@ class MainActivity : AppCompatActivity(),SearchView.OnQueryTextListener{
         transaction.commit()
     }
 
-    fun launchList(){
+    fun launchList() {
         val listFragment = ListFragment.newInstance()
-        transactionSubModule(listFragment,false)
+        transactionSubModule(listFragment, false)
     }
 
-    fun launchDetail(){
-
+    fun showLoader() {
+        loading_progress_bar_transparent?.visibility = View.VISIBLE
     }
+
+    fun hideLoader(){
+        loading_progress_bar_transparent?.visibility = View.GONE
+    }
+
 }
