@@ -57,13 +57,14 @@ class ListFragment : Fragment(), LifecycleOwner,View.OnClickListener,onQueryText
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         observeViewModel(viewModel)
+        recipe_list?.layoutManager=GridLayoutManager(activity,1)
+        recipe_list?.adapter = RecipePuppyAdapter(recipes, context,this)
     }
     override fun onResume() {
         super.onResume()
         val condition = recipes?.size==0
         isEmptyList(condition)
-        recipe_list?.layoutManager=GridLayoutManager(activity,1)
-        recipe_list?.adapter = RecipePuppyAdapter(recipes, context,this)
+
     }
 
     private fun isEmptyList(condition: Boolean){
